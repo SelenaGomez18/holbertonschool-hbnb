@@ -1,4 +1,5 @@
 from app.persistence.repository import InMemoryRepository
+from app.models.user import User
 
 class HBnBFacade:
     def __init__(self):
@@ -22,7 +23,7 @@ class HBnBFacade:
         user = self.user_repo.get(user.id)
         if not user:
             return None
-        
+
         for key, value in user_data.items():
             setattr(user, key, value)
 
