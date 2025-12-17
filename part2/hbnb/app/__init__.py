@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restx import Api
 from .persistence.repository import InMemoryRepository
+from hbnb.app.api.v1.amenities import api as amenities_ns
 
 from .api.v1.users import api as users_ns
 
@@ -19,5 +20,7 @@ def create_app():
         )
 
     api.add_namespace(users_ns, path="/users")
+    api.add_namespace(amenities_ns, path='/amenities')
 
     return app
+
