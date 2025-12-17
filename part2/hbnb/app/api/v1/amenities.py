@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request, current_app
-from app.models.amenity import Amenity
+from hbnb.app.models.amenity import Amenity
 
 api = Namespace('amenities', description='Amenity operations')
 

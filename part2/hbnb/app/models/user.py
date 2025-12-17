@@ -1,14 +1,12 @@
-
-from datetime import datetime
-from models.base_model import BaseModel
+from hbnb.app.models.base_model import BaseModel
 import re
 
 class User(BaseModel):
 
     EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
 
-    def __init__(self, first_name, last_name, email, is_admin=False):
-        super().__init__()
+    def __init__(self, first_name, last_name, email, is_admin=False, **kwargs):
+        super().__init__(**kwargs)
 
         if not first_name or len(first_name) > 50:
             raise ValueError("first_name is required and must be <= 50 characters")

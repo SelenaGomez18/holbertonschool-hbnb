@@ -41,8 +41,13 @@ class InMemoryRepository(Repository):
 
     def update(self, obj_id, data):
         obj = self.get(obj_id)
-        if obj:
-            obj.update(data)
+        if not obj:
+            return None
+
+        for key, value in data.items():
+            setattr(obj, key, value)
+
+        return obj
 
     def delete(self, obj_id):
         if obj_id in self._storage:

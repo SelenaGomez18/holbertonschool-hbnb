@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request, current_app
-from app.models.place import Place
+from hbnb.app.models.place import Place
 
 
 api = Namespace('places', description='Place operations')
