@@ -1,6 +1,6 @@
 
-from models.base_model import BaseModel
-from models.user import User
+from hbnb.app.models.base_model import BaseModel
+from hbnb.app.models.user import User
 
 class Place(BaseModel):
     """Place entity with relationships"""

@@ -34,7 +34,7 @@ class HBnBFacade:
     def create_amenity(self, amenity_data):
         if not amenity_data.get("name"):
             raise ValueError("Amenity name is required")
-        
+
         amenity = Amenity(name=amenity_data["name"])
 
         self.amenity_repo.add(amenity)
@@ -53,20 +53,20 @@ class HBnBFacade:
 
         if not amenity:
             return None
-        
+
         if "name" in amenity_data and amenity_data["name"]:
             amenity.name = amenity_data["name"]
 
         self.amenity_repo.update(amenity_id, amenity)
 
         return amenity
-    
+
     def create_place(self, place_data):
         owner = self.get_user(place_data['owner_id'])
         if not owner:
             raise ValueError("Owner not found")
 
-        
+
         amenities = []
         for amenity_id in place_data.get('amenities', []):
             amenity = self.get_amenity(amenity_id)
@@ -92,8 +92,9 @@ class HBnBFacade:
 
        if not place:
            return None
-       
+
        for key, value in place_data.items():
            setattr(place, key, value)
-        
-        return place
+
+
+       return place
