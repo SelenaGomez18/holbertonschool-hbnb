@@ -1,6 +1,7 @@
 from hbnb.app.persistence.repository import InMemoryRepository
 from hbnb.app.models.user import User
 from hbnb.app.models.amenity import Amenity
+from hbnb.app.models.place import Place
 
 class HBnBFacade:
     def __init__(self):
@@ -58,21 +59,41 @@ class HBnBFacade:
 
         self.amenity_repo.update(amenity_id, amenity)
 
-
         return amenity
     
     def create_place(self, place_data):
-    # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        pass
+        owner = self.get_user(place_data['owner_id'])
+        if not owner:
+            raise ValueError("Owner not found")
+
+        
+        amenities = []
+        for amenity_id in place_data.get('amenities', []):
+            amenity = self.get_amenity(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity {amenity_id} not found")
+            amenities.append(amenity)
+
+        place = Place(**place_data)
+        place.owner = owner
+        place.amenities = amenities
+
+        self.place_repo.add(place)
+        return place
 
     def get_place(self, place_id):
-        # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
-        pass
+        return self.place_repo.get(place_id)
 
     def get_all_places(self):
-        # Placeholder for logic to retrieve all places
-        pass
+        return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        # Placeholder for logic to update a place
-        pass
+       place = self.get_place(place_id)
+
+       if not place:
+           return None
+       
+       for key, value in place_data.items():
+           setattr(place, key, value)
+        
+        return place
