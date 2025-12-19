@@ -2,6 +2,7 @@ from hbnb.app.persistence.repository import InMemoryRepository
 from hbnb.app.models.user import User
 from hbnb.app.models.amenity import Amenity
 from hbnb.app.models.place import Place
+from hbnb.app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
@@ -98,3 +99,63 @@ class HBnBFacade:
 
 
        return place
+
+    def create_review(self, review_data):
+        rating = review_data.get("rating")
+        if rating < 1 or rating > 5:
+            raise ValueError("Rating must be between 1 and 5")
+
+        user = self.repository.get(User, review_data["user_id"])
+        if not user:
+            raise ValueError("User not found")
+
+        place = self.repository.get(Place, review_data["place_id"])
+        if not place:
+            raise ValueError("Place not found")
+
+        review = Review(**review_data)
+        self.repository.add(review)
+
+        place.reviews.append(review)
+
+        return review
+
+    def get_review(self, review_id):
+        return self.repository.get(Review, review_id)
+
+    def get_all_reviews(self):
+        return self.repository.get_all(Review)
+
+    def get_reviews_by_place(self, place_id):
+        place = self.repository.get(Place, place_id)
+        if not place:
+            return None
+        return place.reviews
+
+    def update_review(self, review_id, review_data):
+        review = self.repository.get(Review, review_id)
+        if not review:
+            return None
+
+        if "text" in review_data:
+            review.text = review_data["text"]
+
+        if "rating" in review_data:
+            if review_data["rating"] < 1 or review_data["rating"] > 5:
+                raise ValueError("Rating must be between 1 and 5")
+            review.rating = review_data["rating"]
+
+        return review
+
+    def delete_review(self, review_id):
+        review = self.repository.get(Review, review_id)
+        if not review:
+            return False
+
+        place = self.repository.get(Place, review.place_id)
+        if place:
+            place.reviews = [r for r in place.reviews if r.id != review_id]
+
+        self.repository.delete(review)
+        return True
+
