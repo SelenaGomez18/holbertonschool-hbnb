@@ -1,7 +1,7 @@
 
-from models.base_model import BaseModel
-from models.place import Place
-from models.user import User
+from hbnb.app.models.base_model import BaseModel
+from hbnb.app.models.place import Place
+from hbnb.app.models.user import User
 
 class Review(BaseModel):
     """Review entity with validation"""
