@@ -40,3 +40,4 @@ class Place(BaseModel):
     def add_amenity(self, amenity):
         """Link an amenity to the place"""
         self.amenities.append(amenity)
+        
