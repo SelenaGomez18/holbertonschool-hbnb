@@ -8,6 +8,8 @@ class HBnBFacade:
     def __init__(self):
         self.user_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.place_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -68,7 +70,6 @@ class HBnBFacade:
         if not owner:
             raise ValueError("Owner not found")
 
-
         amenities = []
         for amenity_id in place_data.get('amenities', []):
             amenity = self.get_amenity(amenity_id)
@@ -76,12 +77,16 @@ class HBnBFacade:
                 raise ValueError(f"Amenity {amenity_id} not found")
             amenities.append(amenity)
 
-        place = Place(**place_data)
-        place.owner = owner
-        place.amenities = amenities
+        clean_data = place_data.copy()
+        clean_data.pop('owner_id', None)
+        clean_data.pop('amenities', None)
 
+        place = Place(owner=owner, **clean_data)
+
+        place.amenities = amenities
         self.place_repo.add(place)
         return place
+
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
@@ -160,3 +165,4 @@ class HBnBFacade:
         self.repository.delete(review)
         return True
 
+facade = HBnBFacade()
