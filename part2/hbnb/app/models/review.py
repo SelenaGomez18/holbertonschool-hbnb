@@ -25,5 +25,3 @@ class Review(BaseModel):
         self.rating = rating
         self.place = place
         self.user = user
-
-        place.add_review(self)
