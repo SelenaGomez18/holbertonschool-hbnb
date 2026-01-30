@@ -3,4 +3,3 @@ flask-restx
 flask-sqlalchemy
 flask-jwt-extended
 flask-bcrypt
-marshmallow
