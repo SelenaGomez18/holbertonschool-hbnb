@@ -1,3 +1,4 @@
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Namespace, Resource, fields
 from hbnb.app.services.facade import facade
 
@@ -33,22 +34,25 @@ place_model = api.model('Place', {
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
-    'owner_id': fields.String(required=True, description='ID of the owner'),
 
-    'owner': fields.Nested(user_model, description='Owner of the place'),
     'amenities': fields.List(fields.String, required=True, description="List of amenities ID's"),
     'reviews': fields.List(fields.Nested(review_model), description='List of reviews'),
 })
 #---------------------------------
 @api.route('/')
 class PlaceList(Resource):
+    @jwt_required()
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
         """Register a new place"""
+        current_user_id = get_jwt_identity()
+
+        data = api.payload
+        data['owner_id'] = current_user_id
         try:
-            place = facade.create_place(api.payload)
+            place = facade.create_place(data)
             return place.to_dict(), 201
         except ValueError as e:
             return {"error": str(e)}, 400
@@ -71,17 +75,27 @@ class PlaceResource(Resource):
             return {"error": "Place not found"}, 404
         return place.to_dict(), 200
 
+    @jwt_required()
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Place not found')
-    @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place's information"""
+        current_user_id = get_jwt_identity()
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        if place.owner_id != current_user_id:
+            return {"error": "Unauthorized action"}, 403
+
+        api.payload.pop('owner_id', None)
+
         try:
-            place = facade.update_place(place_id, api.payload)
-            if not place:
-                return {"error": "Place not found"}, 404
-            return {"message": "Place update successfully"}, 200
+            updated_place = facade.update_place(place_id, api.payload)
+            return updated_place.to_dict(), 200
         except ValueError as e:
             return {"error": str(e)}, 400
 

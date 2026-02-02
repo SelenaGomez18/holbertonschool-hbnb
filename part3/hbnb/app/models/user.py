@@ -4,7 +4,6 @@ This module defines the User class for the HBnB project.
 It now includes password handling for security.
 """
 
-
 from hbnb.app.models.base_model import BaseModel
 from hbnb.app.extensions import bcrypt
 import re
@@ -44,6 +43,12 @@ class User(BaseModel):
         Verify a password against the stored hash.
         """
         return bcrypt.check_password_hash(self.password, password)
+
+    def verify_password(self, password):
+        """
+        Alias used by auth/login
+        """
+        return self.check_password(password)
 
     def to_dict(self):
         """
