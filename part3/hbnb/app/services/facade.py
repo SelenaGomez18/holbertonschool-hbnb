@@ -4,11 +4,12 @@ from hbnb.app.models.amenity import Amenity
 from hbnb.app.models.place import Place
 from hbnb.app.models.review import Review
 from hbnb.app.extensions import bcrypt
+from hbnb.app.persistence.sqlalchemy_repository import SQLAlchemyRepository
 
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = InMemoryRepository()
+        self.user_repo = SQLAlchemyRepository(User)
         self.amenity_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
@@ -34,25 +35,30 @@ class HBnBFacade:
         if not user:
             raise ValueError("User not found")
 
+        data_to_update = {}
+
         if 'first_name' in user_data:
-            user.first_name = user_data['first_name']
+            data_to_update['first_name'] = user_data['first_name']
 
         if 'last_name' in user_data:
-            user.last_name = user_data['last_name']
+            data_to_update['last_name'] = user_data['last_name']
 
         if 'email' in user_data:
             if not is_admin:
                 raise ValueError("Only admins can update email")
-            user.email = user_data['email']
+            data_to_update['email'] = user_data['email']
 
         if 'password' in user_data:
             if not is_admin:
                 raise ValueError("Only admins can update password")
-            user.password = bcrypt.generate_password_hash(
+            data_to_update['password'] = bcrypt.generate_password_hash(
                 user_data['password']
             ).decode('utf-8')
 
-        return user
+        return self.user_repo.update(user_id, data_to_update)
+
+    def delete_user(self, user_id):
+        self.user_repo.delete(user_id)
 
     # AMENITIES
 
@@ -98,7 +104,10 @@ class HBnBFacade:
         clean_data.pop('owner_id', None)
         clean_data.pop('amenities', None)
 
-        place = Place(owner=owner, **clean_data)
+        if "description" not in clean_data:
+            raise ValueError("Description is required")
+
+        place = Place(owner_id=owner.id, **clean_data)
         place.amenities = amenities
 
         self.place_repo.add(place)
