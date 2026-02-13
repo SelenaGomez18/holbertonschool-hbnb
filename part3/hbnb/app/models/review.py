@@ -1,27 +1,28 @@
+#!/usr/bin/python3
+"""
+Review SQLAlchemy model for HBnB.
+Mapped with relationships to User and Place.
+"""
 
 from hbnb.app.models.base_model import BaseModel
-from hbnb.app.models.place import Place
-from hbnb.app.models.user import User
+from hbnb.app.extensions import db
+
 
 class Review(BaseModel):
-    """Review entity with validation"""
+    __tablename__ = "reviews"
 
-    def __init__(self, text, rating, place, user):
-        super().__init__()
+    text = db.Column(db.String, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
 
-        if not text:
-            raise ValueError("Review text is required")
+    # ---------- Foreign Keys ----------
+    user_id = db.Column(
+        db.String,
+        db.ForeignKey("users.id"),
+        nullable=False
+    )
 
-        if rating < 1 or rating > 5:
-            raise ValueError("Rating must be between 1 and 5")
-
-        if not isinstance(place, Place):
-            raise ValueError("place must be a Place instance")
-
-        if not isinstance(user, User):
-            raise ValueError("user must be a User instance")
-
-        self.text = text
-        self.rating = rating
-        self.place = place
-        self.user = user
+    place_id = db.Column(
+        db.String,
+        db.ForeignKey("places.id"),
+        nullable=False
+    )

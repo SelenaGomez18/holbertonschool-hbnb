@@ -5,38 +5,44 @@ Description field is optional.
 """
 
 from hbnb.app.models.base_model import BaseModel
+from hbnb.app.extensions import db
+
+
+# Association table for many-to-many Place ↔ Amenity
+place_amenity = db.Table(
+    "place_amenity",
+    db.Column("place_id", db.String, db.ForeignKey("places.id"), primary_key=True),
+    db.Column("amenity_id", db.String, db.ForeignKey("amenities.id"), primary_key=True)
+)
 
 
 class Place(BaseModel):
-    def __init__(
-        self,
-        title,
-        price,
-        latitude,
-        longitude,
-        owner_id,
-        description=None,
-        amenities=None,
-        **kwargs
-    ):
-        super().__init__(**kwargs)
+    __tablename__ = "places"
 
-        if not title or len(title) > 100:
-            raise ValueError("Title is required and must be <= 100 chars")
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String, nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
-        if price is None or price < 0:
-            raise ValueError("Price must be a positive number")
+    # ---------- Foreign Keys ----------
+    owner_id = db.Column(
+        db.String,
+        db.ForeignKey("users.id"),
+        nullable=False
+    )
 
-        if latitude is None or not (-90 <= latitude <= 90):
-            raise ValueError("Latitude must be between -90 and 90")
+    # ---------- Relationships ----------
+    reviews = db.relationship(
+        "Review",
+        backref="place",
+        lazy=True,
+        cascade="all, delete-orphan"
+    )
 
-        if longitude is None or not (-180 <= longitude <= 180):
-            raise ValueError("Longitude must be between -180 and 180")
-
-        self.title = title
-        self.price = price
-        self.latitude = latitude
-        self.longitude = longitude
-        self.owner_id = owner_id
-        self.description = description
-        self.amenities = amenities 
+    amenities = db.relationship(
+        "Amenity",
+        secondary=place_amenity,
+        backref="places",
+        lazy="subquery"
+    )

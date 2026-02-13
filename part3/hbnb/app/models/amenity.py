@@ -1,13 +1,14 @@
+#!/usr/bin/python3
+"""
+Amenity SQLAlchemy model for HBnB.
+Only core attributes mapped — no relationships yet.
+"""
 
 from hbnb.app.models.base_model import BaseModel
+from hbnb.app.extensions import db
+
 
 class Amenity(BaseModel):
-    """Amenity entity"""
+    __tablename__ = "amenities"
 
-    def __init__(self, name):
-        super().__init__()
-
-        if not name or len(name) > 50:
-            raise ValueError("Amenity name is required and must be <= 50 characters")
-
-        self.name = name
+    name = db.Column(db.String(50), nullable=False, unique=True)

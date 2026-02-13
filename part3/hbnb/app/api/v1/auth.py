@@ -9,12 +9,16 @@ login_model = api.model('Login', {
     'password': fields.String(required=True, description='User password')
 })
 
+
 @api.route('/login')
 class Login(Resource):
     @api.expect(login_model)
     def post(self):
         """Authenticate user and return a JWT token"""
         credentials = api.payload
+
+        if not credentials or 'email' not in credentials or 'password' not in credentials:
+            return {'error': 'Email and password required'}, 400
 
         user = facade.get_user_by_email(credentials['email'])
 
@@ -26,4 +30,8 @@ class Login(Resource):
             additional_claims={"is_admin": user.is_admin}
         )
 
-        return {'access_token': access_token}, 200
+        return {
+            'access_token': access_token,
+            'user_id': str(user.id),
+            'is_admin': user.is_admin
+        }, 200
