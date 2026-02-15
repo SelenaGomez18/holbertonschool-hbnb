@@ -78,7 +78,7 @@ class HBnBFacade:
     def update_amenity(self, amenity_id, amenity_data):
         return self.amenity_repo.update(amenity_id, amenity_data)
 
-    # ---------- PLACES ----------
+    # ---------- PLACES ---------
 
     def create_place(self, place_data):
         owner = self.get_user(place_data["owner_id"])
