@@ -19,7 +19,6 @@ user_update_model = api.model('UserUpdate', {
     'password': fields.String(description='Password')
 })
 
-#Users
 
 @api.route('/')
 class UserList(Resource):
