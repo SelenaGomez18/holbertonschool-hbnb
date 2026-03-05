@@ -60,6 +60,7 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+*.db
 
 # Flask stuff:
 instance/
@@ -206,5 +207,9 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 *.drawio
+<<<<<<< HEAD
 *.tgz
 *__pycache__
+=======
+*venv
+>>>>>>> 0a3e424 (Update .gitignore)
