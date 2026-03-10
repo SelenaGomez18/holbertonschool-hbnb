@@ -86,3 +86,47 @@ footer {
   text-align: center;
   padding: 1rem;
 }
+
+/* place cards */
+.place-card {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+}
+
+/* review cards */
+.review-card {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+}
+
+/* place details */
+.place-details {
+  margin: 20px;
+}
+
+/* place info */
+.place-info {
+  margin-top: 10px;
+}
+
+/* add review section */
+.add-review {
+  margin: 20px;
+}
+
+/* navigation */
+nav {
+  margin-top: 10px;
+}
+
+.login-button {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+}
