@@ -1,60 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Place Details</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Details</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
 <header>
-    <h1>HBnB</h1>
+  <img src="images/logo.png" alt="HBnB logo" class="logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html" class="login-button">Login</a>
+  </nav>
 </header>
 
 <main>
+  <!-- PLACE DETAILS -->
+  <section id="place-details"></section>
 
-    <!-- PLACE DETAILS -->
-    <section id="place-details">
-        <!-- JS va a insertar aquí:
-            name
-            description
-            price
-            amenities
-            reviews
-        -->
-    </section>
+  <!-- REVIEWS -->
+  <section id="reviews-section">
+    <h2>Reviews</h2>
+    <ul id="reviews-list"></ul>
+  </section>
 
-    <!-- ADD REVIEW FORM -->
-    <section id="add-review">
-        <h2>Add a Review</h2>
+  <!-- ADD REVIEW FORM -->
+  <section id="add-review">
+    <h2>Add a Review</h2>
+    <form id="review-form">
+      <label for="review-text">Your Review</label>
+      <textarea id="review-text" name="review-text" required></textarea>
 
-        <form id="review-form">
+      <label for="rating">Rating</label>
+      <select id="rating" name="rating">
+        <option value="1">1 - Bad</option>
+        <option value="2">2</option>
+        <option value="3">3 - Ok</option>
+        <option value="4">4</option>
+        <option value="5">5 - Excellent</option>
+      </select>
 
-            <label for="review-text">Your Review</label>
-            <textarea id="review-text" name="review-text" required></textarea>
-
-            <label for="rating">Rating</label>
-            <select id="rating" name="rating">
-                <option value="1">1 - Bad</option>
-                <option value="2">2</option>
-                <option value="3">3 - Ok</option>
-                <option value="4">4</option>
-                <option value="5">5 - Excellent</option>
-            </select>
-
-            <button type="submit">Submit Review</button>
-
-        </form>
-    </section>
-
+      <button type="submit">Submit Review</button>
+    </form>
+  </section>
 </main>
 
 <footer>
-    <p>HBnB Project</p>
+  <p>HBnB Project</p>
 </footer>
 
 <script src="scripts.js"></script>
-
 </body>
 </html>

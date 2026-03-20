@@ -23,18 +23,18 @@
 
 <h2>Add a Review</h2>
 
-<form class="form">
+<form id="review-form">
 
-<label for="review">Your Review:</label>
-<textarea id="review" name="review" required></textarea>
+<label for="review-text">Your Review:</label>
+<textarea id="review-text" name="review" required></textarea>
 
 <label for="rating">Rating:</label>
 <select id="rating" name="rating" required>
-<option value="1">1</option>
+<option value="1">1 - Bad</option>
 <option value="2">2</option>
 <option value="3">3</option>
 <option value="4">4</option>
-<option value="5">5</option>
+<option value="5">5 - Excellent</option>
 </select>
 
 <button type="submit">Submit Review</button>
@@ -48,6 +48,8 @@
 <footer>
 <p>All rights reserved</p>
 </footer>
+
+<script src="scripts.js"></script>
 
 </body>
 </html>

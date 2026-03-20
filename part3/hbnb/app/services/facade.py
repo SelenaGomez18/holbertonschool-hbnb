@@ -110,13 +110,30 @@ class HBnBFacade:
     def update_place(self, place_id, place_data):
         return self.place_repo.update(place_id, place_data)
 
-    # ---------- REVIEWS ----------
+# ---------- REVIEWS ----------
 
     def get_reviews_by_place(self, place_id):
         place = self.place_repo.get(place_id)
         if not place:
             return None
         return place.reviews
+
+    def create_review(self, review_data):
+        # Validate user exists
+        user = self.get_user(review_data["user_id"])
+        if not user:
+            raise ValueError("User not found")
+
+        # Validate place exists
+        place = self.get_place(review_data["place_id"])
+        if not place:
+            raise ValueError("Place not found")
+
+        # Create review instance
+        review = Review(**review_data)
+
+        # Save review to database
+        return self.review_repo.add(review)
 
 
 facade = HBnBFacade()

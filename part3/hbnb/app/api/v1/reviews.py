@@ -32,7 +32,6 @@ class ReviewList(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        # Usuario no puede review su propio place
         if place.owner_id == current_user_id:
             return {"error": "You cannot review your own place."}, 400
 
