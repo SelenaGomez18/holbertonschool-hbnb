@@ -68,9 +68,22 @@ class PlaceResource(Resource):
     def get(self, place_id):
         """Get place by ID"""
         place = facade.get_place(place_id)
+
         if not place:
             return {"error": "Place not found"}, 404
-        return place.to_dict(), 200
+
+        place_data = place.to_dict()
+
+        place_data["reviews"] = [
+            {
+                "user_name": f"{review.author.first_name} {review.author.last_name}",
+                "rating": review.rating,
+                "text": review.text
+            }
+            for review in place.reviews
+        ]
+
+        return place_data, 200
 
     @jwt_required()
     @api.expect(place_model)

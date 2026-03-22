@@ -42,7 +42,7 @@ async function handleLogin(event) {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/api/v1/auth/login/", {
+        const response = await fetch("http://127.0.0.1:5000/api/v1/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
@@ -62,7 +62,7 @@ async function handleLogin(event) {
 // ----------- API Functions -----------
 async function fetchPlaces() {
     try {
-        const response = await fetch("http://127.0.0.1:5000/api/v1/places/");
+        const response = await fetch("http://127.0.0.1:5000/api/v1/places");
         if (!response.ok) throw new Error("Failed to fetch places");
         const places = await response.json();
         displayPlaces(places);
