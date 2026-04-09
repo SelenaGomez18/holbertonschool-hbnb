@@ -1,3 +1,5 @@
+let allPlaces = [];
+
 // ----------- Helper Functions -----------
 function getCookie(name) {
     const cookies = document.cookie.split(";");
@@ -65,7 +67,10 @@ async function fetchPlaces() {
         const response = await fetch("http://127.0.0.1:5000/api/v1/places");
         if (!response.ok) throw new Error("Failed to fetch places");
         const places = await response.json();
+
+        allPlaces = places; // guardar todos los places
         displayPlaces(places);
+
     } catch (error) {
         console.error(error);
     }
@@ -170,6 +175,25 @@ function displayReviews(reviews) {
     });
 }
 
+// ----------- Price Filter -----------
+function filterPlaces() {
+    const filter = document.getElementById("price-filter");
+    if (!filter) return;
+
+    const value = filter.value;
+
+    if (value === "all") {
+        displayPlaces(allPlaces);
+        return;
+    }
+
+    const maxPrice = parseInt(value, 10);
+
+    const filtered = allPlaces.filter(place => place.price <= maxPrice);
+
+    displayPlaces(filtered);
+}
+
 // ----------- Main -----------
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -183,6 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // INDEX PAGE
     if (document.getElementById("places-list")) {
         fetchPlaces();
+
+        const filter = document.getElementById("price-filter");
+        if (filter) {
+            filter.addEventListener("change", filterPlaces);
+        }
+
         return;
     }
 
@@ -210,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (success) {
                 reviewForm.reset();
 
-                // Add the new review to the list immediately
                 const reviewsList = document.getElementById("reviews-list");
                 if (reviewsList) {
                     const li = document.createElement("li");

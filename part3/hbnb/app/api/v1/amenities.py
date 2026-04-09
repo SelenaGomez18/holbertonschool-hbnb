@@ -25,7 +25,7 @@ class AmenityList(Resource):
         ], 200
 
     @jwt_required()
-    @admin_required
+    #@admin_required
     @api.expect(amenity_model, validate=True)
     @api.response(201, 'Amenity created successfully')
     def post(self):
